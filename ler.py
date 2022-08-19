@@ -6,9 +6,9 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'mqtteste.cloud.shiftr.io'
 port = 1883
-topic = "PALMS-MQTT"
+topic = "MENSAGEM"
 # generate client ID with pub prefix randomly
-client_id = f'python-mqtt-{random.randint(0, 100)}'
+client_id = 'Subscritor'
 username = 'mqtteste'
 password = 'testes'
 flag = 0
@@ -42,12 +42,15 @@ def subscribe(client: mqtt_client):
 def publish(client):
     while True:
         time.sleep(1)
-        msg = str (input("Digite a mensagem a ser enviada(-1 para sair) "))
+        arquivo = open('arq02.txt','r')
+        msg = arquivo.read()   
         result = client.publish(topic, msg)
-        # result: [0, 1]
+        with open(f'pnrd_initTag.pnrd', 'r') as text_file:
+        	print(text_file.read())
         status = result[0]
         if status == 0:
-            print(f"Send `{msg}` to topic `{topic}`")
+           msg = '-1'
+           status = 0
         else:
             print(f"Failed to send message to topic {topic}")
         if msg == '-1':

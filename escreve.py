@@ -6,13 +6,15 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'mqtteste.cloud.shiftr.io'
 port = 1883
-topic = "PALMS-MQTT"
+topic = "MENSAGEM"
 # generate client ID with pub prefix randomly
-client_id = f'python-mqtt-{random.randint(0, 100)}'
+client_id = 'Publicador'
 username = 'mqtteste'
 password = 'testes'
 flag = 0
 msg_flag=0
+with open('arq01.txt', 'w') as arquivo:
+	arquivo.close()
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -33,6 +35,13 @@ def subscribe(client: mqtt_client):
         print(f"Recebido `{msg.payload.decode()}` de `{msg.topic}` topic")
         msg_flag=msg.payload.decode()
         print(msg_flag)
+        arquivo = open('arq01.pnrd', 'a')
+        if msg_flag == '':
+        	arquivo.close()
+        else:
+        	arquivo.write(msg_flag)
+        	arquivo.write('\n')
+
     global msg_flag
     client.subscribe(topic)
     client.on_message = on_message
